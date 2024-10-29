@@ -55,8 +55,12 @@ cd Vision-Token-Scanner
 ```bash
 npm install
 ```
+* Run on local host:
+```bash
+node index.js
+```
 
-3. Create a `.env` file in the root directory:
+1. Create a `.env` file in the root directory:
 ```env
 # Discord
 DISCORD_TOKEN=your_discord_bot_token
