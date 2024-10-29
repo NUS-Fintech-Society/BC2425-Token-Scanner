@@ -1,13 +1,13 @@
-// Add models/Portfolio.js
+// models/Portfolio.js
 const mongoose = require('mongoose');
 
 const portfolioSchema = new mongoose.Schema({
-    userId: { type: String, required: true },
+    userId: { type: String, required: true, unique: true },
     holdings: [{
-        tokenAddress: String,
-        amount: Number,
-        buyPrice: Number,
-        buyDate: Date,
+        tokenAddress: { type: String, required: true },
+        amount: { type: Number, required: true },
+        buyPrice: { type: Number, required: true },
+        buyDate: { type: Date, default: Date.now },
         tags: [String]
     }],
     performance: {
@@ -20,7 +20,8 @@ const portfolioSchema = new mongoose.Schema({
     riskMetrics: {
         portfolioBeta: { type: Number, default: 1 },
         sharpeRatio: { type: Number, default: 0 },
-        diversificationScore: { type: Number, default: 0 }
+        diversificationScore: { type: Number, default: 0 },
+        valueAtRisk: { type: Number, default: 0 }
     },
     lastUpdated: { type: Date, default: Date.now }
 });

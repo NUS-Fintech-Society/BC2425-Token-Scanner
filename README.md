@@ -217,3 +217,6 @@ For support and inquiries:
 - Create an issue in the GitHub repository
 - Join our Discord server: //TODO [Discord Invite Link]
 - Follow us on Twitter: //TODO [@TokenScannerBot]
+
+![alt text](image.png)
+![alt text](<image copy.png>)

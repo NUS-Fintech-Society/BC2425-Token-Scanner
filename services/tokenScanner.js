@@ -8,6 +8,7 @@ const config = require('../config');
 class TokenScanner {
     constructor(apiService) {
         this.apiService = apiService;
+        console.log('Initializing token scanner...' + config.SOLANA_RPC_URL);
         this.connection = new Connection(config.SOLANA_RPC_URL);
         this.lastScannedTimestamp = Date.now();
         this.seenTokens = new Set();

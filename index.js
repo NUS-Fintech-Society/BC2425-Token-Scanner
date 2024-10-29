@@ -4,16 +4,20 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 const config = require('./config');
+const connectDB = require('./database');
 
 // Import core services
 const TokenScanner = require('./services/tokenScanner');
 const ApiService = require('./services/apiService');
-const LaunchMonitor = require('./services/launchMonitor');
 const PortfolioManager = require('./services/portfolioManager');
 const TechnicalAnalysis = require('./services/technicalAnalysis');
 const AlertsManager = require('./services/AlertsManager');
 const SocialSentimentAnalyzer = require('./services/socialSentiment');
 const TradingStrategyAdvisor = require('./services/tradingStrategy');
+const LaunchMonitor = require('./services/launchMonitor');
+const WalletTracker = require('./services/walletTracker');
+const FilterManager = require('./services/FilterManager');
+const RecommendationEngine = require('./services/recommendationEngine');
 
 class TokenScannerBot {
     constructor() {
@@ -43,7 +47,7 @@ class TokenScannerBot {
             // Core services
             this.apiService = new ApiService();
             this.tokenScanner = new TokenScanner(this.apiService);
-            this.launchMonitor = new LaunchMonitor(this.apiService);
+
             this.portfolioManager = new PortfolioManager();
             this.technicalAnalysis = new TechnicalAnalysis();
             this.alertsManager = new AlertsManager();
@@ -53,10 +57,21 @@ class TokenScannerBot {
                 this.socialAnalyzer
             );
 
+
+
+            // Initialize other services
+            this.launchMonitor = new LaunchMonitor(this.apiService);
+            this.walletTracker = new WalletTracker();
+            this.filterManager = new FilterManager();
+            this.recommendationEngine = new RecommendationEngine(
+                this.tokenScanner,
+                this.apiService
+            );
+
+            console.log('All services initialized');
             // Load commands
             await this.loadCommands();
 
-            console.log('Services initialized successfully');
         } catch (error) {
             console.error('Error initializing services:', error);
             process.exit(1);
@@ -85,11 +100,11 @@ class TokenScannerBot {
     async start() {
         try {
             // Connect to MongoDB
-            await mongoose.connect(config.MONGODB_URI, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
-            console.log('Connected to MongoDB');
+            // Connect to MongoDB first
+
+            
+            // await connectDB();
+            console.log('Database connection established');
 
             // Start monitoring services
             this.startMonitoringServices();
@@ -214,7 +229,10 @@ class TokenScannerBot {
                 tokenScanner: this.tokenScanner,
                 portfolioManager: this.portfolioManager,
                 alertsManager: this.alertsManager,
-                strategyAdvisor: this.strategyAdvisor
+                strategyAdvisor: this.strategyAdvisor,
+                walletTracker: this.walletTracker,
+                filterManager: this.filterManager,
+                recommendationEngine: this.recommendationEngine
             });
         } catch (error) {
             console.error('Command execution error:', error);

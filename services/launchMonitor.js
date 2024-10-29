@@ -1,4 +1,4 @@
-// Add services/launchMonitor.js
+// services/launchMonitor.js
 const ExperiencedDev = require('../models/ExperiencedDev');
 const technicalIndicators = require('technicalindicators');
 
@@ -9,76 +9,62 @@ class LaunchMonitor {
         this.seenTokens = new Set();
     }
 
-    async monitorNewLaunches() {
-        try {
-            const latestTokens = await this.apiService.getLatestTokens();
-            const newTokens = this.filterNewTokens(latestTokens);
-            
-            for (const token of newTokens) {
-                const analysis = await this.analyzeNewLaunch(token);
-                if (analysis.score >= 7) {
-                    await this.notifyNewLaunch(analysis);
-                }
+    filterNewTokens(tokens) {
+        const newTokens = tokens.filter(token => {
+            const isNew = !this.seenTokens.has(token.address) && 
+                         token.timestamp > this.lastChecked;
+            if (isNew) {
+                this.seenTokens.add(token.address);
             }
+            return isNew;
+        });
+        this.lastChecked = Date.now();
+        return newTokens;
+    }
+
+    async getInitialMetrics(token) {
+        try {
+            const [liquidity, holders, social] = await Promise.all([
+                this.apiService.getLiquidityInfo(token.address),
+                this.apiService.getHolderCount(token.address),
+                this.checkSocialPresence(token)
+            ]);
+
+            return {
+                liquidityScore: this.calculateLiquidityScore(liquidity),
+                holderScore: this.calculateHolderScore(holders),
+                tokenomicsScore: this.analyzeTokenomics(token),
+                socialScore: social.score
+            };
         } catch (error) {
-            console.error('Error monitoring launches:', error);
+            console.error('Error getting initial metrics:', error);
+            return {
+                liquidityScore: 0,
+                holderScore: 0,
+                tokenomicsScore: 0,
+                socialScore: 0
+            };
         }
     }
 
-    async analyzeNewLaunch(token) {
-        const [
-            devInfo,
-            initialMetrics,
-            socialPresence
-        ] = await Promise.all([
-            this.checkDeveloper(token.deployer),
-            this.getInitialMetrics(token),
-            this.checkSocialPresence(token)
-        ]);
-
-        return {
-            token,
-            score: this.calculateLaunchScore({
-                devInfo,
-                initialMetrics,
-                socialPresence
-            }),
-            details: {
-                developer: devInfo,
-                metrics: initialMetrics,
-                social: socialPresence
-            }
-        };
+    async checkSocialPresence(token) {
+        try {
+            // Implement social media checking logic
+            return { score: 0.5, platforms: [] };
+        } catch (error) {
+            console.error('Error checking social presence:', error);
+            return { score: 0, platforms: [] };
+        }
     }
 
-    async checkDeveloper(address) {
-        const dev = await ExperiencedDev.findOne({ address });
-        if (!dev) return { known: false, score: 0 };
-
-        return {
-            known: true,
-            score: dev.reputation,
-            history: {
-                successRate: dev.averageSuccessRate,
-                totalLaunches: dev.totalLaunches,
-                lastActive: dev.lastActive
-            }
-        };
-    }
-
-    calculateLaunchScore(data) {
-        const weights = {
-            devReputation: 0.4,
-            initialLiquidity: 0.2,
-            socialPresence: 0.2,
-            tokenomics: 0.2
-        };
-
-        return (
-            data.devInfo.score * weights.devReputation +
-            data.initialMetrics.liquidityScore * weights.initialLiquidity +
-            data.socialPresence.score * weights.socialPresence +
-            data.initialMetrics.tokenomicsScore * weights.tokenomics
-        );
+    async notifyNewLaunch(analysis) {
+        try {
+            // Implement notification logic
+            console.log('New promising launch detected:', analysis);
+        } catch (error) {
+            console.error('Error sending launch notification:', error);
+        }
     }
 }
+
+module.exports = LaunchMonitor;
