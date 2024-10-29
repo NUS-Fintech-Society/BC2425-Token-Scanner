@@ -47,8 +47,8 @@ A comprehensive Discord bot for analyzing tokens on pump.fun, providing real-tim
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/token-scanner-bot.git
-cd token-scanner-bot
+git clone https://github.com/NUS-Fintech-Society/Vision-Token-Scanner
+cd Vision-Token-Scanner
 ```
 
 2. Install dependencies:
@@ -211,5 +211,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support and inquiries:
 - Create an issue in the GitHub repository
-- Join our Discord server: [Discord Invite Link]
-- Follow us on Twitter: [@TokenScannerBot]
+- Join our Discord server: //TODO [Discord Invite Link]
+- Follow us on Twitter: //TODO [@TokenScannerBot]
