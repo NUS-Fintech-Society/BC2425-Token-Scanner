@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2020",                              /* Set to ES2020 for modern JavaScript features */
+    "lib": ["es2020", "dom"],                        /* Includes ES2020 and browser types */
+    "module": "commonjs",                            /* CommonJS for Node.js compatibility */
+    "esModuleInterop": true,                         /* Eases importing CommonJS modules */
+    "forceConsistentCasingInFileNames": true,        /* Enforces case-sensitivity for imports */
+
+    /* Strict Type-Checking Options */
+    "strict": true,                                  /* Enables all strict type-checking options */
+
+    /* Skipping Certain Checks */
+    "skipLibCheck": true                             /* Skips type checking for declaration files */
+  },
+  "include": ["src/**/*.ts"],                        /* Includes all TypeScript files in the 'src' folder */
+  "exclude": ["node_modules"]                        /* Excludes node_modules folder */
+}
