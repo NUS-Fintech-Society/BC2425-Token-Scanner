@@ -103,7 +103,7 @@ class TokenScannerBot {
             // Connect to MongoDB first
 
             
-            // await connectDB();
+            await connectDB();
             console.log('Database connection established');
 
             // Start monitoring services
@@ -111,6 +111,8 @@ class TokenScannerBot {
 
             // Login to Discord
             await this.client.login(config.DISCORD_TOKEN);
+
+            console.log('Bot started successfully');
         } catch (error) {
             console.error('Error starting bot:', error);
             process.exit(1);
@@ -118,6 +120,7 @@ class TokenScannerBot {
     }
 
     startMonitoringServices() {
+        console.log('starting monitoring services...');
         // Monitor new launches
         setInterval(async () => {
             try {
@@ -282,6 +285,8 @@ class TokenScannerBot {
 
 // Create and start bot instance
 const bot = new TokenScannerBot();
+
+console.log("   _____ _                 _       _     _     _   ");
 bot.start().catch(console.error);
 
 // Handle process events
